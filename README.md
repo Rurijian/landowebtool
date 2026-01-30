@@ -83,23 +83,32 @@ These patches enable the extension to properly handle tool calls with reasoning 
 
 #### `search` - Web Search
 
-Search the web for information.
+Search the web for information using Serper API. Returns organic search results, answer boxes, knowledge graphs, and related questions.
 
 **Parameters:**
 - `query` (string, required): The search query
-- `numResults` (number, optional): Number of results to return (1-20, default: 5)
+
+**Note:** The number of results is controlled by the "Max Results" setting in the extension configuration (default: 5, range: 1-20).
 
 **Example:**
 ```json
 {
-  "query": "latest news about AI",
-  "numResults": 5
+  "query": "latest news about AI"
 }
 ```
 
+**Response Format:**
+The tool returns a JSON object containing:
+- `results`: Array of search results with title, link, snippet, and position
+- `answerBox`: Direct answer if available (e.g., featured snippet)
+- `knowledgeGraph`: Knowledge graph information
+- `relatedQuestions`: People also ask questions
+- `relatedSearches`: Related search queries
+- `credits`: Credits used for the request
+
 #### `scrape` - Web Scraping
 
-Extract content from a web page.
+Extract content from a web page using Serper API. Returns the page title, content text, and metadata.
 
 **Parameters:**
 - `url` (string, required): The URL to scrape
@@ -110,6 +119,14 @@ Extract content from a web page.
   "url": "https://example.com/article"
 }
 ```
+
+**Response Format:**
+The tool returns a JSON object containing:
+- `title`: Page title
+- `url`: The scraped URL
+- `content`: Main text content of the page
+- `wordCount`: Approximate word count of the content
+- `credits`: Credits used for the request
 
 ## File Structure
 
