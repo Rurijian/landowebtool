@@ -1,6 +1,6 @@
 # Landowebtool Extension
 
-A SillyTavern extension that enables Kimi 2.5 tool calling functionality with web search and web scraping capabilities using the Serper API.
+A SillyTavern extension that enables Kimi 2.5 tool calling functionality with web search and web scraping capabilities using Serper API.
 
 ## Features
 
@@ -15,11 +15,8 @@ A SillyTavern extension that enables Kimi 2.5 tool calling functionality with we
 ### Via SillyTavern Extension Panel (Recommended)
 
 1. Open SillyTavern
-2. Click the Extensions menu, Download Extensions & Assets
-3. Click "Assets URL"
-4. Enter the GitHub URL: `https://github.com/Rurijian/landowebtool`
-5. Click "Install"
-6. The extension will be automatically downloaded and installed
+2. Click Extensions menu (top right corner)
+3. Click "Install for all users"
 
 ### Manual Installation
 
@@ -74,7 +71,7 @@ These patches enable the extension to properly handle tool calls with reasoning 
 ### Setting Up the Extension
 
 1. Open SillyTavern
-2. Click the Extensions menu (wand icon)
+2. Click Extensions menu (wand icon)
 3. Find "Landowebtool" in the list
 4. Click to open the settings
 5. Enter your Serper API key
@@ -228,7 +225,7 @@ Logs are prefixed with `[Landowebtool]` for easy filtering.
 
 1. Check that the extension is enabled in the Extensions menu
 2. Verify that the API key is configured and valid
-3. Ensure the "Enable Tools" toggle is on
+3. Ensure that the "Enable Tools" toggle is on
 4. Check the browser console for error messages
 
 ### API key validation fails
@@ -242,7 +239,7 @@ Logs are prefixed with `[Landowebtool]` for easy filtering.
 
 1. Check the browser console for error messages
 2. Verify that the API key is valid
-3. Ensure the API endpoint is accessible
+3. Ensure that the API endpoint is accessible
 4. Check that the request timeout is sufficient
 
 ## API Limits
