@@ -12,44 +12,21 @@ A SillyTavern extension that enables Kimi 2.5 tool calling functionality with we
 
 ## Installation
 
-1. Place the `landowebtool` folder in `public/scripts/extensions/`
-2. Restart SillyTavern or reload the page
-3. The extension will be automatically loaded
+### Via SillyTavern Extension Panel (Recommended)
 
-## Manual SillyTavern Patches
+1. Open SillyTavern
+2. Click the Extensions menu (wand icon)
+3. Click "Install Extension"
+4. Enter the GitHub URL: `https://github.com/Rurijian/landowebtool`
+5. Click "Install"
+6. The extension will be automatically downloaded and installed
 
-This extension requires manual patches to SillyTavern core files to enable proper tool calling with reasoning support.
+### Manual Installation
 
-### Patch 1: src/prompt-converters.js
-
-At line 1359, add dummy reasoning content for assistant tool call messages:
-
-```javascript
-message.reasoning_content = 'The user request requires a tool call so I should perform one.';
-```
-
-### Patch 2: src/endpoints/backends/chat-completions.js
-
-In the moonshot branch, starting at line 2261, add the following function call after the moonshot configuration block:
-
-```javascript
-} else if (request.body.chat_completion_source == CHAT_COMPLETION_SOURCES.MOONSHOT) {
-    apiUrl = new URL(request.body.reverse_proxy || API_MOONSHOT).toString();
-    apiKey = request.body.reverse_proxy ? request.body.proxy_password : readSecret(request.user.directories, SECRET_KEYS.MOONSHOT);
-    headers = {};
-    bodyParams = {
-        thinking: {
-            type: request.body.include_reasoning ? 'enabled' : 'disabled',
-        },
-    };
-    request.body.json_schema
-        ? setJsonObjectFormat(bodyParams, request.body.messages, request.body.json_schema)
-        : addAssistantPrefix(request.body.messages, [], 'partial');
-}
-addReasoningContentToToolCalls(request.body.messages);
-```
-
-These patches enable the extension to properly handle tool calls with reasoning content for models that support it.
+1. Download the extension from GitHub
+2. Place the `landowebtool` folder in `public/scripts/extensions/third-party/`
+3. Restart SillyTavern or reload the page
+4. The extension will be automatically loaded
 
 ## Configuration
 
