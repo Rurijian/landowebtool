@@ -28,6 +28,41 @@ A SillyTavern extension that enables Kimi 2.5 tool calling functionality with we
 3. Restart SillyTavern or reload the page
 4. The extension will be automatically loaded
 
+## Required SillyTavern Patches
+
+**Important**: For proper tool calling with Kimi 2.5 models and reasoning support, you need to manually patch two SillyTavern core files. These patches are **NOT** included in the extension distribution.
+
+### Patch 1: `src/prompt-converters.js`
+At line 1359, add dummy reasoning content for assistant tool call messages:
+
+```javascript
+message.reasoning_content = 'The user request requires a tool call so I should perform one.';
+```
+
+### Patch 2: `src/endpoints/backends/chat-completions.js`
+In the moonshot branch, starting at line 2261, add the following function call after the moonshot configuration block:
+
+```javascript
+} else if (request.body.chat_completion_source == CHAT_COMPLETION_SOURCES.MOONSHOT) {
+    apiUrl = new URL(request.body.reverse_proxy || API_MOONSHOT).toString();
+    apiKey = request.body.reverse_proxy ? request.body.proxy_password : readSecret(request.user.directories, SECRET_KEYS.MOONSHOT);
+    headers = {};
+    bodyParams = {
+        thinking: {
+            type: request.body.include_reasoning ? 'enabled' : 'disabled',
+        },
+    };
+    request.body.json_schema
+        ? setJsonObjectFormat(bodyParams, request.body.messages, request.body.json_schema)
+        : addAssistantPrefix(request.body.messages, [], 'partial');
+}
+addReasoningContentToToolCalls(request.body.messages);
+```
+
+These patches enable the extension to properly handle tool calls with reasoning content for models that support it.
+
+**Note**: These patches are specific to your SillyTavern installation and must be applied manually. They are not part of the extension package to avoid conflicts with future SillyTavern updates.
+
 ## Configuration
 
 ### Getting a Serper API Key
