@@ -15,8 +15,8 @@ A SillyTavern extension that enables Kimi 2.5 tool calling functionality with we
 ### Via SillyTavern Extension Panel (Recommended)
 
 1. Open SillyTavern
-2. Click the Extensions menu (wand icon)
-3. Click "Install Extension"
+2. Click the Extensions menu, Download Extensions & Assets
+3. Click "Assets URL"
 4. Enter the GitHub URL: `https://github.com/Rurijian/landowebtool`
 5. Click "Install"
 6. The extension will be automatically downloaded and installed
