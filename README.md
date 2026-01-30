@@ -8,7 +8,6 @@ A SillyTavern extension that enables Kimi 2.5 tool calling functionality with we
 - **Web Scraping**: Extract content from web pages using Serper API
 - **Seamless Integration**: Works with SillyTavern's ToolManager for tool calling
 - **Settings UI**: Easy-to-use settings panel for API key configuration
-- **TypeScript**: Written in TypeScript for type safety and maintainability
 - **Comprehensive Logging**: Built-in logger for debugging and monitoring
 
 ## Installation
@@ -16,6 +15,41 @@ A SillyTavern extension that enables Kimi 2.5 tool calling functionality with we
 1. Place the `landowebtool` folder in `public/scripts/extensions/`
 2. Restart SillyTavern or reload the page
 3. The extension will be automatically loaded
+
+## Manual SillyTavern Patches
+
+This extension requires manual patches to SillyTavern core files to enable proper tool calling with reasoning support.
+
+### Patch 1: src/prompt-converters.js
+
+At line 1359, add dummy reasoning content for assistant tool call messages:
+
+```javascript
+message.reasoning_content = 'The user request requires a tool call so I should perform one.';
+```
+
+### Patch 2: src/endpoints/backends/chat-completions.js
+
+In the moonshot branch, starting at line 2261, add the following function call after the moonshot configuration block:
+
+```javascript
+} else if (request.body.chat_completion_source == CHAT_COMPLETION_SOURCES.MOONSHOT) {
+    apiUrl = new URL(request.body.reverse_proxy || API_MOONSHOT).toString();
+    apiKey = request.body.reverse_proxy ? request.body.proxy_password : readSecret(request.user.directories, SECRET_KEYS.MOONSHOT);
+    headers = {};
+    bodyParams = {
+        thinking: {
+            type: request.body.include_reasoning ? 'enabled' : 'disabled',
+        },
+    };
+    request.body.json_schema
+        ? setJsonObjectFormat(bodyParams, request.body.messages, request.body.json_schema)
+        : addAssistantPrefix(request.body.messages, [], 'partial');
+}
+addReasoningContentToToolCalls(request.body.messages);
+```
+
+These patches enable the extension to properly handle tool calls with reasoning content for models that support it.
 
 ## Configuration
 
@@ -81,51 +115,36 @@ Extract content from a web page.
 
 ```
 landowebtool/
-├── ARCHITECTURE.md          # Architecture design document
 ├── README.md                 # This file
 ├── manifest.json             # Extension manifest
 ├── index.js                 # Main entry point
+├── settings.html            # Settings HTML template
 ├── style.css                # Extension styles
 ├── types/
-│   └── index.ts            # Type definitions
+│   └── index.js            # Type definitions (JSDoc)
 ├── api/
-│   ├── types.ts            # API response types
-│   └── serper.ts          # Serper API client
+│   ├── types.js            # API response types
+│   └── serper.js          # Serper API client
 ├── tools/
-│   ├── search.ts           # Web search tool
-│   ├── scrape.ts           # Web scraping tool
-│   └── index.ts           # Tool registry
-├── ui/
-│   ├── settings.ts         # Settings UI logic
-│   └── settings.html      # Settings HTML template
+│   ├── search.js           # Web search tool
+│   ├── scrape.js           # Web scraping tool
+│   └── index.js           # Tool registry
 └── utils/
-    ├── logger.ts           # Logging utility
-    └── constants.ts       # Constants
+    ├── logger.js           # Logging utility
+    └── constants.js       # Constants
 ```
 
 ## Development
 
-### Building the Extension
-
-The extension uses TypeScript for development. To build:
-
-```bash
-# Install dependencies (if any)
-npm install
-
-# Build TypeScript to JavaScript
-npm run build
-```
-
 ### Adding New Tools
 
-1. Create a new tool file in `tools/` (e.g., `tools/newtool.ts`)
+1. Create a new tool file in `tools/` (e.g., `tools/newtool.js`)
 2. Implement the tool using the `ToolManager.registerFunctionTool()` API
-3. Import and register the tool in `tools/index.ts`
+3. Import and register the tool in `tools/index.js`
 
 Example tool structure:
 
-```typescript
+```javascript
 import { ToolManager } from '../../../tool-calling.js';
 
 export function registerNewTool() {
