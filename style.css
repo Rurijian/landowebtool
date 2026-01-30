@@ -1,0 +1,296 @@
+/**
+ * Landowebtool Extension - Styles
+ *
+ * This file contains the CSS styles for the Landowebtool extension.
+ * It styles the settings UI and any other extension-related elements.
+ */
+
+/* Main container for settings */
+.kimi-web-tools-settings {
+    padding: 16px;
+    max-width: 600px;
+}
+
+/* Header section */
+.kimi-web-tools-header {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.kimi-web-tools-header h3 {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--SmartThemeBodyColor);
+}
+
+.kimi-web-tools-description {
+    margin: 0;
+    font-size: 14px;
+    color: var(--SmartThemeEmColor);
+    line-height: 1.5;
+}
+
+/* Section styling */
+.kimi-web-tools-section {
+    margin-bottom: 24px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.kimi-web-tools-section h4 {
+    margin: 0 0 16px 0;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--SmartThemeBodyColor);
+}
+
+/* Field styling */
+.kimi-web-tools-field {
+    margin-bottom: 20px;
+}
+
+.kimi-web-tools-field:last-child {
+    margin-bottom: 0;
+}
+
+.kimi-web-tools-label {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--SmartThemeBodyColor);
+    margin-bottom: 6px;
+}
+
+.kimi-web-tools-required {
+    color: #e74c3c;
+    margin-left: 4px;
+}
+
+/* Input group */
+.kimi-web-tools-input-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.kimi-web-tools-input {
+    flex: 1;
+    min-width: 0;
+}
+
+.kimi-web-tools-unit {
+    font-size: 13px;
+    color: var(--SmartThemeEmColor);
+    white-space: nowrap;
+}
+
+/* Test button */
+.kimi-web-tools-test-button {
+    padding: 8px 16px;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+/* Status indicator */
+.kimi-web-tools-status {
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 4px;
+    margin-bottom: 6px;
+    transition: all 0.2s ease;
+}
+
+.kimi-web-tools-status.empty {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--SmartThemeEmColor);
+}
+
+.kimi-web-tools-status.testing {
+    background: rgba(241, 196, 15, 0.2);
+    color: #f1c40f;
+}
+
+.kimi-web-tools-status.success {
+    background: rgba(46, 204, 113, 0.2);
+    color: #2ecc71;
+}
+
+.kimi-web-tools-status.error {
+    background: rgba(231, 76, 60, 0.2);
+    color: #e74c3c;
+}
+
+/* Help text */
+.kimi-web-tools-help {
+    font-size: 12px;
+    color: var(--SmartThemeEmColor);
+    line-height: 1.4;
+}
+
+.kimi-web-tools-help a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.kimi-web-tools-help a:hover {
+    text-decoration: underline;
+}
+
+/* Toggle switch */
+.kimi-web-tools-toggle {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.kimi-web-tools-toggle input[type="checkbox"] {
+    display: none;
+}
+
+.kimi-web-tools-toggle label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.kimi-web-tools-toggle-slider {
+    position: relative;
+    width: 44px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    margin-right: 12px;
+    transition: background 0.2s ease;
+}
+
+.kimi-web-tools-toggle-slider::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 20px;
+    height: 20px;
+    background: var(--SmartThemeBodyColor);
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+}
+
+.kimi-web-tools-toggle input:checked + label .kimi-web-tools-toggle-slider {
+    background: #3498db;
+}
+
+.kimi-web-tools-toggle input:checked + label .kimi-web-tools-toggle-slider::before {
+    transform: translateX(20px);
+}
+
+.kimi-web-tools-toggle-label {
+    font-size: 14px;
+    color: var(--SmartThemeBodyColor);
+}
+
+/* Action buttons */
+.kimi-web-tools-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.kimi-web-tools-reset-button,
+.kimi-web-tools-save-button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.kimi-web-tools-reset-button {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--SmartThemeBodyColor);
+}
+
+.kimi-web-tools-reset-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.kimi-web-tools-save-button {
+    background: #3498db;
+    color: white;
+}
+
+.kimi-web-tools-save-button:hover {
+    background: #2980b9;
+}
+
+.kimi-web-tools-save-button:disabled,
+.kimi-web-tools-reset-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Footer */
+.kimi-web-tools-footer {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.kimi-web-tools-info {
+    font-size: 13px;
+    color: var(--SmartThemeEmColor);
+}
+
+.kimi-web-tools-info strong {
+    color: var(--SmartThemeBodyColor);
+}
+
+.kimi-web-tools-list {
+    margin: 8px 0 0 0;
+    padding-left: 20px;
+    list-style: disc;
+}
+
+.kimi-web-tools-list li {
+    margin-bottom: 4px;
+}
+
+.kimi-web-tools-list code {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .kimi-web-tools-settings {
+        padding: 12px;
+    }
+
+    .kimi-web-tools-actions {
+        flex-direction: column;
+    }
+
+    .kimi-web-tools-reset-button,
+    .kimi-web-tools-save-button {
+        width: 100%;
+    }
+}
+
+/* Dark theme adjustments */
+@media (prefers-color-scheme: dark) {
+    .kimi-web-tools-section {
+        background: rgba(0, 0, 0, 0.2);
+    }
+}

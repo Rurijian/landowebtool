@@ -1,0 +1,12 @@
+{
+    "display_name": "Landowebtool",
+    "loading_order": 20,
+    "requires": [],
+    "optional": [],
+    "js": "index.js",
+    "css": "style.css",
+    "author": "Extension Author",
+    "version": "1.0.0",
+    "homePage": "https://github.com/your-repo",
+    "settings": true
+}

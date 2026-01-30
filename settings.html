@@ -1,0 +1,120 @@
+<div class="landowebtool_settings">
+    <div class="inline-drawer">
+        <div class="inline-drawer-toggle inline-drawer-header">
+            <b>Landowebtool Configuration</b>
+            <div class="inline-drawer-icon fa-solid fa-circle-chevron-down down"></div>
+        </div>
+        <div class="inline-drawer-content">
+            <div class="flex-container flexFlowColumn">
+                <h4>API Configuration</h4>
+                
+                <div class="flex-container flexFlowColumn">
+                    <label for="landowebtool_api_key">
+                        <span>Serper API Key</span>
+                        <span class="required">*</span>
+                    </label>
+                    <div class="flex-container">
+                        <input 
+                            type="password" 
+                            id="landowebtool_api_key" 
+                            class="text_pole flex1"
+                            placeholder="Enter your Serper API key"
+                            value="{{settings.serperApiKey}}"
+                        />
+                        <button id="landowebtool_test_api_key" class="menu_button">
+                            Test
+                        </button>
+                    </div>
+                    <div id="landowebtool_api_key_status" class="status empty">
+                        Click Test to validate
+                    </div>
+                    <div class="help-text">
+                        Get your API key from <a href="https://serper.dev" target="_blank">https://serper.dev</a>
+                    </div>
+                </div>
+
+                <div class="flex-container flexFlowColumn">
+                    <label class="checkbox_label" for="landowebtool_enabled">
+                        <input 
+                            type="checkbox" 
+                            id="landowebtool_enabled" 
+                            class="checkbox"
+                            {{#if settings.enabled}}checked{{/if}}
+                        />
+                        <span>Enable Tools</span>
+                    </label>
+                    <div class="help-text">
+                        When enabled, web search and scraping tools are available
+                    </div>
+                </div>
+            </div>
+
+            <hr class="sysHR">
+
+            <div class="flex-container flexFlowColumn">
+                <h4>Search Options</h4>
+                
+                <div class="flex-container flexFlowColumn">
+                    <label for="landowebtool_max_results">
+                        <span>Max Results</span>
+                    </label>
+                    <div class="flex-container">
+                        <input 
+                            type="number" 
+                            id="landowebtool_max_results" 
+                            class="text_pole flex1"
+                            min="1"
+                            max="20"
+                            value="{{settings.maxResults}}"
+                        />
+                        <span class="unit">results</span>
+                    </div>
+                    <div class="help-text">
+                        Maximum number of search results to return (1-20)
+                    </div>
+                </div>
+
+                <div class="flex-container flexFlowColumn">
+                    <label for="landowebtool_timeout">
+                        <span>Request Timeout</span>
+                    </label>
+                    <div class="flex-container">
+                        <input 
+                            type="number" 
+                            id="landowebtool_timeout" 
+                            class="text_pole flex1"
+                            min="5"
+                            max="120"
+                            value="{{settings.timeout}}"
+                        />
+                        <span class="unit">seconds</span>
+                    </div>
+                    <div class="help-text">
+                        Maximum time to wait for API responses (5-120 seconds)
+                    </div>
+                </div>
+            </div>
+
+            <hr class="sysHR">
+
+            <div class="flex-container flexFlowColumn">
+                <h4>Available Tools</h4>
+                <div class="help-text">
+                    <strong>Web Search:</strong> Search the web for information using Serper API<br>
+                    <strong>Web Scraping:</strong> Extract content from web pages using Serper API
+                </div>
+            </div>
+
+            <hr class="sysHR">
+
+            <div class="flex-container justifyEnd">
+                <button id="landowebtool_reset" class="menu_button">
+                    Reset to Defaults
+                </button>
+                <button id="landowebtool_save" class="menu_button">
+                    Save Settings
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
