@@ -13,9 +13,9 @@
  */
 
 // Import required SillyTavern modules
-import { extension_settings, getContext, loadExtensionSettings, renderExtensionTemplateAsync } from "../../extensions.js";
-import { saveSettingsDebounced } from "../../../script.js";
-import { ToolManager } from "../../tool-calling.js";
+import { extension_settings, getContext, loadExtensionSettings } from "../../../extensions.js";
+import { saveSettingsDebounced } from "../../../../script.js";
+import { ToolManager } from "../../../tool-calling.js";
 
 // Import extension modules
 import { registerAllTools, unregisterAllTools, reregisterTools } from './tools/index.js';
@@ -23,7 +23,7 @@ import { EXTENSION_NAME, DEFAULT_SETTINGS } from './types/index.js';
 
 // Keep track of where your extension is located, name should match repo name
 const extensionName = "landowebtool";
-const extensionFolderPath = `scripts/extensions/landowebtool`;
+const extensionFolderPath = `scripts/extensions/third-party/landowebtool`;
 
 // Extension state
 let isToolsRegistered = false;
@@ -162,9 +162,14 @@ function onSaveClick() {
  */
 jQuery(async () => {
     // Render settings HTML with current settings
-    const settingsHtml = await renderExtensionTemplateAsync(extensionName, 'settings', {
-        settings: extension_settings[extensionName] || DEFAULT_SETTINGS
-    });
+    const settings = extension_settings[extensionName] || DEFAULT_SETTINGS;
+    let settingsHtml = await $.get(`${extensionFolderPath}/settings.html`);
+    
+    // Replace template variables
+    settingsHtml = settingsHtml.replace(/{{settings\.serperApiKey}}/g, settings.serperApiKey || '');
+    settingsHtml = settingsHtml.replace(/{{settings\.enabled}}/g, settings.enabled ? 'checked' : '');
+    settingsHtml = settingsHtml.replace(/{{settings\.maxResults}}/g, settings.maxResults || 5);
+    settingsHtml = settingsHtml.replace(/{{settings\.timeout}}/g, settings.timeout || 30);
     
     // Append settingsHtml to extensions_settings
     $("#extensions_settings").append(settingsHtml);

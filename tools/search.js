@@ -4,8 +4,8 @@
  * This module implements the search tool for Kimi tool calling.
  * Uses Serper API to perform web searches.
  */
-import { ToolManager } from '../../../tool-calling.js';
-import { extension_settings } from '../../../extensions.js';
+import { ToolManager } from '../../../../tool-calling.js';
+import { extension_settings } from '../../../../extensions.js';
 import { createSerperClient } from '../api/serper.js';
 import { error, debug, logToolInvocation, logToolResult } from '../utils/logger.js';
 import { TOOLS, SETTINGS, ERRORS } from '../utils/constants.js';

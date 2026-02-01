@@ -4,11 +4,49 @@
  * This module implements the scrape tool for Kimi tool calling.
  * Uses Serper API to scrape web page content.
  */
-import { ToolManager } from '../../../tool-calling.js';
-import { extension_settings } from '../../../extensions.js';
+import { ToolManager } from '../../../../tool-calling.js';
+import { extension_settings } from '../../../../extensions.js';
 import { createSerperClient } from '../api/serper.js';
 import { error, debug, logToolInvocation, logToolResult } from '../utils/logger.js';
 import { TOOLS, SETTINGS, ERRORS } from '../utils/constants.js';
+/**
+ * Cleans up scraped content by normalizing whitespace and removing HTML entities
+ * @param content - Raw content from the scraper
+ * @returns Cleaned content
+ */
+function cleanContent(content) {
+    if (!content || typeof content !== 'string') {
+        return '';
+    }
+
+    // Decode HTML entities
+    let cleaned = content
+        .replace(/&/g, '&')
+        .replace(/</g, '<')
+        .replace(/>/g, '>')
+        .replace(/"/g, '"')
+        .replace(/'/g, "'")
+        .replace(/&nbsp;/g, ' ')
+        .replace(/'/g, "'");
+
+    // Normalize whitespace - replace multiple newlines with single newline
+    cleaned = cleaned.replace(/\n{3,}/g, '\n\n');
+
+    // Normalize multiple spaces to single space
+    cleaned = cleaned.replace(/[ \t]+/g, ' ');
+
+    // Remove leading/trailing whitespace from each line
+    cleaned = cleaned.split('\n')
+        .map(line => line.trim())
+        .filter(line => line.length > 0) // Remove empty lines
+        .join('\n');
+
+    // Trim the entire content
+    cleaned = cleaned.trim();
+
+    return cleaned;
+}
+
 /**
  * Formats scrape results for return to the model
  * @param response - Serper API response
@@ -19,7 +57,7 @@ function formatScrapeResults(response, url) {
     // Handle potential nested response structures
     // Some APIs return data nested under 'data' or 'result' properties
     let data = response;
-    
+
     // Check if response has a 'data' property (common in API wrappers)
     if (response && typeof response === 'object' && response.data !== undefined) {
         data = response.data;
@@ -28,23 +66,24 @@ function formatScrapeResults(response, url) {
     else if (response && typeof response === 'object' && response.result !== undefined) {
         data = response.result;
     }
-    
+
     // Extract fields from Serper API response structure
     // Actual Serper API returns: {text, metadata: {title}, credits}
     // We need to map these to the expected fields
     const title = (data.metadata && data.metadata.title) || '';
-    const content = data.text || '';
+    const rawContent = data.text || '';
+    const content = cleanContent(rawContent);
     const credits = data.credits || 0;
-    
+
     // Note: Serper API doesn't return url, markdown, or statusCode in the response
     // We'll provide the URL from the request parameters
     const scrapedUrl = url || '';
     const markdown = data.markdown || ''; // Not provided by Serper
     const statusCode = data.statusCode || 200; // Assume success if we got a response
-    
+
     // Calculate word count from content
     const wordCount = content ? content.split(/\s+/).length : 0;
-    
+
     return {
         title,
         url: scrapedUrl,
