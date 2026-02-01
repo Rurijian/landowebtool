@@ -1,6 +1,6 @@
 # Landowebtool Extension
 
-A SillyTavern extension that enables Kimi 2.5 tool calling functionality with web search and web scraping capabilities using the Serper API.
+A SillyTavern extension that enables Kimi 2.5 tool calling functionality with web search and web scraping capabilities using Serper API.
 
 ## Features
 
@@ -15,11 +15,8 @@ A SillyTavern extension that enables Kimi 2.5 tool calling functionality with we
 ### Via SillyTavern Extension Panel (Recommended)
 
 1. Open SillyTavern
-2. Click the Extensions menu, Download Extensions & Assets
-3. Click "Assets URL"
-4. Enter the GitHub URL: `https://github.com/Rurijian/landowebtool`
-5. Click "Install"
-6. The extension will be automatically downloaded and installed
+2. Click Extensions menu (top right corner)
+3. Click "Install for all users"
 
 ### Manual Installation
 
@@ -74,7 +71,7 @@ These patches enable the extension to properly handle tool calls with reasoning 
 ### Setting Up the Extension
 
 1. Open SillyTavern
-2. Click the Extensions menu (wand icon)
+2. Click Extensions menu (wand icon)
 3. Find "Landowebtool" in the list
 4. Click to open the settings
 5. Enter your Serper API key
@@ -139,6 +136,99 @@ The tool returns a JSON object containing:
 - `content`: Main text content of the page
 - `wordCount`: Approximate word count of the content
 - `credits`: Credits used for the request
+
+## Recommended System Prompt
+
+To improve tool calling reliability, add the following system prompt to your character's system prompt or the global system prompt in SillyTavern:
+
+```markdown
+## Web Search and Scraping Tools
+
+You have access to two tools for accessing information from the internet:
+
+### 1. `search` Tool
+**Function name to call:** `search`
+
+**When to use:**
+- When the user asks for current information, news, or facts
+- When you need information that may have changed since your training cutoff
+- When the user asks "what is", "who is", "how to", "find", "search for", "look up", or similar queries
+- When you need to verify or fact-check information
+
+**How to call:**
+```json
+{
+  "name": "search",
+  "arguments": {
+    "query": "concise search query here"
+  }
+}
+```
+
+**Parameter:**
+- `query` (string, required): A concise search query (3-8 words) capturing what the user wants to know
+
+**Examples of good queries:**
+- "Python datetime format string"
+- "ChatGPT API pricing 2025"
+- "how to fix blue screen error Windows 11"
+
+### 2. `scrape` Tool
+**Function name to call:** `scrape`
+
+**When to use:**
+- AFTER using `search` and finding relevant URLs
+- When you need to read the full content of a specific webpage
+- When search snippets are insufficient to answer the user's question
+- When the user provides a specific URL and asks you to read it
+
+**How to call:**
+```json
+{
+  "name": "scrape",
+  "arguments": {
+    "url": "https://example.com/page"
+  }
+}
+```
+
+**Parameter:**
+- `url` (string, required): The complete URL of the webpage to scrape (must start with http:// or https://)
+
+### Standard Workflow
+
+1. User asks a question requiring current information
+2. Call `search` with a relevant query
+3. Review search results (titles, snippets, URLs)
+4. If snippets are insufficient, call `scrape` on 1-3 relevant URLs
+5. Use the scraped content to answer the user's question
+
+**Important rules:**
+- ALWAYS call `search` first to get URLs, then call `scrape` on those URLs if needed
+- Don't search for things you already know from your training data
+- Don't search if the user's question can be answered with general knowledge
+- Be selective - only scrape pages that appear highly relevant
+- If search results don't contain relevant information, inform the user and suggest refining the query
+- If scraping fails, try another URL from the search results
+
+**Examples of when to search:**
+- "What's the latest news about AI?"
+- "Who won the Super Bowl this year?"
+- "How do I install Python on Windows 11?"
+- "What's the current price of Bitcoin?"
+
+**Examples of when NOT to search:**
+- "What is 2+2?"
+- "Who was the first president of the United States?"
+- "Explain photosynthesis"
+- "Write a poem about love"
+
+**After getting results:**
+- Synthesize information from multiple sources when possible
+- Cite your sources by mentioning the website or article title
+- If information conflicts between sources, acknowledge the discrepancy
+- Be honest when you can't find a satisfactory answer
+```
 
 ## File Structure
 
@@ -228,7 +318,7 @@ Logs are prefixed with `[Landowebtool]` for easy filtering.
 
 1. Check that the extension is enabled in the Extensions menu
 2. Verify that the API key is configured and valid
-3. Ensure the "Enable Tools" toggle is on
+3. Ensure that the "Enable Tools" toggle is on
 4. Check the browser console for error messages
 
 ### API key validation fails
@@ -242,8 +332,16 @@ Logs are prefixed with `[Landowebtool]` for easy filtering.
 
 1. Check the browser console for error messages
 2. Verify that the API key is valid
-3. Ensure the API endpoint is accessible
+3. Ensure that the API endpoint is accessible
 4. Check that the request timeout is sufficient
+
+### Model not calling tools
+
+1. Ensure the recommended system prompt is added to your character/system prompt
+2. Verify that the model supports tool calling (Kimi 2.5 or compatible)
+3. Check that tool calling is enabled in SillyTavern settings
+4. Try asking explicit questions that require current information (e.g., "What's the latest news about X?")
+5. Review the model's response - it may be attempting to answer from training data instead of using tools
 
 ## API Limits
 
